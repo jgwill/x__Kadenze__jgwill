@@ -1,13 +1,19 @@
 
 
-/*
- * @STATUS I DO NOT LIKE IT, even though it has interesting code
+/*  Etch a Sketch Feature Extractor - Arduino Sketch
+ * By J.Guillaume D.-Isabelle, 2021
+ *
+ * @STATUS Getting Better, even though it has interesting code
+ * I think that what I would like to feel is the speed 
+ * at which I am turning the wheel. How can I achieve that ?
  * 
  * 
 2 Joysticks : 1 for moving up down, 1 for left - right
 1 distance mesurement for Pen size
 1 button for something
 */
+
+int outValBase = 1; //The value we send as output
 
 int j2pinX = A3;
 int j2pinY = A4;
@@ -122,7 +128,7 @@ void loop() {
   if (moving || firstRun)
   {
     firstRun = false;
-    sendData(v1,pv1,v2,pv2,s3,distance,distance2);
+    sendData(v1,j1valX,j1valY,s3,v2,j2valX,j2valY);
      delay(1);
    //  sendData(0,0,0,0,s3,distance,distance2);
     moving = false;
@@ -178,13 +184,13 @@ void printDebug(int v1,int v2,int v3,int v4)
     Serial.print(" - ");
 }
 
-int mapRange(int val)
+int mapRange(int _v)
 {
 
 
-    if (val > minRangeNeutral && val < maxRangeNeutral) return 0;
+    if (_v > minRangeNeutral && _v < maxRangeNeutral) return 0;
      else 
-     if (val > rangeValue) return 1;
+     if (_v > rangeValue) return 1;
       else return -1;
 
 }
@@ -202,38 +208,38 @@ int parseRange(int vx,int px,int vy,int py)
     0,-1
     1,-1
     */
-    if (vx == 1 && vy == 0 && px== 1 && py == -1) return 1;
+    if (vx == 1 && vy == 0 && px== 1 && py == -1) return outValBase;
     else 
-    if (vx == 1 && vy == 0 && px== 1 && py == 1) return -1;
+    if (vx == 1 && vy == 0 && px== 1 && py == 1) return outValBase * -1;
     
-    if (vx == 1 && vy == 1 && px== 1 && py == 0) return 1;
+    if (vx == 1 && vy == 1 && px== 1 && py == 0) return outValBase;
     else
-    if (vx == 1 && vy == 1 && px== 0 && py == 1) return -1;
+    if (vx == 1 && vy == 1 && px== 0 && py == 1) return outValBase * -1;
     
-    if (vx == 0 && vy == 1 && px== 1 && py == 1) return 1;
+    if (vx == 0 && vy == 1 && px== 1 && py == 1) return outValBase;
     else
-    if (vx == 0 && vy == 1 && px== -1 && py == 1) return -1;
+    if (vx == 0 && vy == 1 && px== -1 && py == 1) return outValBase * -1;
     
-    if (vx == -1 && vy == 1 && px== 0 && py == 1) return 1;
+    if (vx == -1 && vy == 1 && px== 0 && py == 1) return outValBase;
     else
-    if (vx == -1 && vy == 1 && px== -1 && py == 0) return -1;
+    if (vx == -1 && vy == 1 && px== -1 && py == 0) return outValBase * -1;
     
-    if (vx == -1 && vy == 0 && px== -1 && py == 1) return 1;
+    if (vx == -1 && vy == 0 && px== -1 && py == 1) return outValBase;
     else
-    if (vx == -1 && vy == 0 && px== -1 && py == -1) return -1;
+    if (vx == -1 && vy == 0 && px== -1 && py == -1) return outValBase * -1;
     
-    if (vx == -1 && vy == -1 && px== -1 && py == 0) return 1;
+    if (vx == -1 && vy == -1 && px== -1 && py == 0) return outValBase;
     else
-    if (vx == -1 && vy == -1 && px== 0 && py == -1) return -1;
+    if (vx == -1 && vy == -1 && px== 0 && py == -1) return outValBase * -1;
     
-    if (vx == 0 && vy == -1 && px== -1 && py == -1) return 1;
+    if (vx == 0 && vy == -1 && px== -1 && py == -1) return outValBase;
     else
-    if (vx == 0 && vy == -1 && px== 1 && py == -1) return -1;
+    if (vx == 0 && vy == -1 && px== 1 && py == -1) return outValBase * -1;
 
     
-    if (vx == 1 && vy == -1 && px== 1 && py == 0) return -1;
+    if (vx == 1 && vy == -1 && px== 1 && py == 0) return outValBase * -1;
     else
-    if (vx == 1 && vy == -1 && px== 0 && py == -1) return 1;
+    if (vx == 1 && vy == -1 && px== 0 && py == -1) return outValBase;
     
     
     
